@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 from src.ingestor import ingest_all_mhtml
-# from src.processor import process_all_html
+from src.processor import process_all_html
 # from src.loader import load_all_jsons
 # from src.run_data_profile import run_data_profile
 
@@ -41,6 +41,9 @@ def main():
 		case "ingest":
 			print("🥉 Bronze: Running \"ingest\" command")
 			ingest_all_mhtml(SOURCE_DIR, BRONZE_DIR)
+		case "process":
+			print("🥈 Silver: Running \"process\" command")
+			process_all_html(BRONZE_DIR, SILVER_DIR)
 		case _:
 			print(f"Error: Unknown command: {argument}")
 	sys.exit(0)
