@@ -50,6 +50,7 @@ def load_all_jsons(input_dir: Path, output_db: Path):
 			print(f"⏭️  {msg}")
 			skipped_total += 1
 	conn.commit()
+	conn.close()
 	print(f"\n📊 Gold Summary:\nTotal: {inserted_total + skipped_total} | Inserted: {inserted_total} | Skipped: {skipped_total}")
 
 	# pass
