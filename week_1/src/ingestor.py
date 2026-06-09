@@ -1,8 +1,6 @@
 from pathlib import Path
-# from email import message_from_file
 import email
 import quopri
-from email.message import EmailMessage
 
 def extract_html_from_mhtml(mhtml_file: Path, html_file: Path):
 	try:
