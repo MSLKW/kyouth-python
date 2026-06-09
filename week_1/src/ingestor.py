@@ -43,5 +43,5 @@ def ingest_all_mhtml(input_dir: Path, output_dir: Path):
 			print(f"⚠️  {msg}")
 			failed_total += 1
 	
-	print(f"📊 Bronze Summary:\nTotal: {extracted_total + failed_total} | Extracted: {extracted_total} | Failed: {failed_total}")
+	print(f"\n📊 Bronze Summary:\nTotal: {extracted_total + failed_total} | Extracted: {extracted_total} | Failed: {failed_total}")
 	
