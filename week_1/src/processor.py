@@ -3,10 +3,10 @@ import pydantic
 from bs4 import BeautifulSoup
 
 class JobListing(pydantic.BaseModel):
-	source_id: str # <meta property="og:url" content="https://<WEBSITE_URL>/job/91360026"> grab "91360026" as source_id 
-	job_title: str # <h1 data-automation="job-detail-title">
-	company: str # <span data-automation="advertiser-name">
-	description: str # <div data-automation="jobAdDetails">
+	source_id: str = pydantic.Field(min_length=1) # <meta property="og:url" content="https://<WEBSITE_URL>/job/91360026"> grab "91360026" as source_id 
+	job_title: str = pydantic.Field(min_length=1) # <h1 data-automation="job-detail-title">
+	company: str = pydantic.Field(min_length=1) # <span data-automation="advertiser-name">
+	description: str = pydantic.Field(min_length=1) # <div data-automation="jobAdDetails">
 
 def html_to_json(html_file: Path, json_file: Path):
 	try:
@@ -40,7 +40,7 @@ def html_to_json(html_file: Path, json_file: Path):
 			description=description_element.get_text(separator=" ", strip=True)
 		)
 	except pydantic.ValidationError as e:
-		return (False, f"JobListing validation failed: {e.errors()}")
+		return (False, f"JobListing validation failed: {[error["msg"] for error in e.errors()]}")
 
 	with open(json_file, 'w', encoding="utf-8") as f:
 		f.write(joblisting.model_dump_json(indent=4))
@@ -66,4 +66,4 @@ def process_all_html(input_dir: Path, output_dir: Path):
 			print(f"⚠️  {msg}")
 			skipped_total += 1
 	
-	print(f"📊 Silver Summary:\nTotal: {processed_total + skipped_total} | Processed: {processed_total} | Skipped: {skipped_total}")
+	print(f"\n📊 Silver Summary:\nTotal: {processed_total + skipped_total} | Processed: {processed_total} | Skipped: {skipped_total}")
