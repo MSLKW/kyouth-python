@@ -32,12 +32,15 @@ def html_to_json(html_file: Path, json_file: Path):
 	elif (not description_element):
 		return (False, f"Missing description in {html_file.name}")
 	
-	joblisting = JobListing(
-		source_id=source_id_element.rstrip('/').rsplit('/', -1)[-1],
-		job_title=job_title_element.get_text(separator=" ", strip=True),
-		company=company_element.get_text(separator=" ", strip=True),
-		description=description_element.get_text(separator=" ", strip=True)
-	)
+	try:
+		joblisting = JobListing(
+			source_id=source_id_element.rstrip('/').rsplit('/', -1)[-1],
+			job_title=job_title_element.get_text(separator=" ", strip=True),
+			company=company_element.get_text(separator=" ", strip=True),
+			description=description_element.get_text(separator=" ", strip=True)
+		)
+	except pydantic.ValidationError as e:
+		return (False, f"JobListing validation failed: {e.errors()}")
 
 	with open(json_file, 'w', encoding="utf-8") as f:
 		f.write(joblisting.model_dump_json(indent=4))
