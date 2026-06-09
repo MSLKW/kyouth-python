@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 from src.ingestor import ingest_all_mhtml
 from src.processor import process_all_html
-# from src.loader import load_all_jsons
+from src.loader import load_all_jsons
 # from src.run_data_profile import run_data_profile
 
 SOURCE_DIR = Path("data/0_source")
@@ -44,6 +44,9 @@ def main():
 		case "process":
 			print("🥈 Silver: Running \"process\" command")
 			process_all_html(BRONZE_DIR, SILVER_DIR)
+		case "load":
+			print("Gold: Running \"load\" command")
+			load_all_jsons(SILVER_DIR, GOLD_DIR / DB_NAME)
 		case _:
 			print(f"Error: Unknown command: {argument}")
 	sys.exit(0)
