@@ -51,7 +51,7 @@ def html_to_json(html_file: Path, json_file: Path):
     except pydantic.ValidationError as e:
         return (
             False,
-            f"JobListing validation failed: {[error['msg'] for error in e.errors()]}",
+            f"Validation failed: {[error['msg'] for error in e.errors()]} in {html_file.name}",
         )
 
     with open(json_file, "w", encoding="utf-8") as f:
