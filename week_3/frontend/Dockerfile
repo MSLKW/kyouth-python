@@ -8,7 +8,7 @@ RUN mkdir src
 
 COPY pyproject.toml uv.lock ./
 
-COPY ./src/app.py ./src/main.py
+COPY ./src/main.py ./src/main.py
 COPY ./src/templates/. ./src/templates/.
 
 RUN uv sync

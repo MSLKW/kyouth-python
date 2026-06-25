@@ -1,0 +1,21 @@
+name: kyouth-chat-app
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "8000:8000"
+    networks:
+      - chat-app
+    depends_on:
+      - backend
+  backend:
+    build: ./backend
+    networks:
+      - chat-app
+    environment:
+      - API_KEY=${API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL}
+
+networks:
+  chat-app:
