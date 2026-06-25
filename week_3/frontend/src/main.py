@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import httpx
+import os
 
 app = FastAPI()
 
@@ -26,7 +27,7 @@ def get_script():
 
 @app.post("/chat")
 async def chat(payload: dict[str, str]):
-	client = httpx.AsyncClient(base_url="http://backend:8001")
+	client = httpx.AsyncClient(base_url=os.environ.get("BACKEND_URL"))
 	try:
 		response = await client.post("/chat", json=payload)
 		response.raise_for_status()

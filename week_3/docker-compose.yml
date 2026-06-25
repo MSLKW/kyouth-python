@@ -9,6 +9,8 @@ services:
       - chat-app
     depends_on:
       - backend
+    environment:
+      - BACKEND_URL=${BACKEND_URL}
   backend:
     build: ./backend
     networks:
