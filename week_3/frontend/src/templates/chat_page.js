@@ -1,13 +1,73 @@
+import * as pdfjsLib from './pdf.mjs';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
 
 const chatBox = document.getElementById("chat-box");
 const textInput = document.getElementById("text-input");
 const sendButton = document.getElementById("send-button");
 const fileUpload = document.getElementById("file-upload");
 
+let gFile = undefined;
+
+async function readPdfFile(event) {
+    if (!gFile) return;
+
+    try {
+        const arrayBuffer = await gFile.arrayBuffer();
+
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = "";
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(" ");
+            fullText += `${pageText}`;
+        }
+		return (fullText);
+    } catch (error) {
+        console.error("Error processing PDF:", error);
+        return ("");
+    }
+}
+
+function readTextFile(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) {
+      reject(new Error("No file provided."));
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const content = event.target.result;
+      resolve(content);
+    };
+
+    reader.onerror = (event) => {
+      reject(event.target.error);
+    };
+
+    reader.readAsText(file);
+  });
+}
+
 async function getResponseAsync(text) {
 	const url = new URL(import.meta.url);
 	url.pathname = "/chat";
-	const data = {message: text};
+	let fileText = "";
+	if (gFile) {
+		const ext = gFile.name.split('.').pop().toLowerCase();
+		if (ext == "pdf")
+			fileText = await readPdfFile(gFile);
+		else if (ext == "txt")
+			fileText = await readTextFile(gFile);
+		else
+			console.warn("File type not supported");
+		console.log(fileText);
+	}
+	const data = {message: text, file_contents: fileText};
 
 	let message = "Error fetching response";
 	try {
@@ -21,6 +81,7 @@ async function getResponseAsync(text) {
 
 		if (response.ok === false) {
 			console.log("Response returned non-ok");
+			return (message);
 		}
 		const responseJSON = await response.json();
 		message = responseJSON.message;
@@ -73,9 +134,9 @@ textInput.addEventListener("keypress", () => {
 });
 
 fileUpload.addEventListener("change", (event) => {
-	const file = event.target.files[0];
+	gFile = event.target.files[0];
 
-	if (file) {
-		sendMessage(`Sent file: ${file.name}`);
+	if (gFile) {
+		sendMessage(`Selected file: ${gFile.name}`);
 	}
 })

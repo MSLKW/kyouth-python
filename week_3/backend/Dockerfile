@@ -2,7 +2,7 @@ FROM python:3.14.4-bookworm
 
 COPY --from=docker.io/astral/uv:latest /uv /uvx /bin/
 
-WORKDIR /var/www/frontend
+WORKDIR /app
 
 RUN mkdir src
 
