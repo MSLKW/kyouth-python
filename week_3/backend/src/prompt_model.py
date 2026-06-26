@@ -10,6 +10,7 @@ def prompt_model(model: str, prompt: str) -> str:
         model == "gemini-2.5-flash"
         or model == "gemini-2.5-flash-lite"
         or model == "gemini-3-flash-preview"
+        or model == "gemini-3.1-flash-lite"
     ):
         client = genai.Client(api_key=os.environ.get("API_KEY"))
         response = client.models.generate_content(model=model, contents=prompt)

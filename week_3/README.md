@@ -14,7 +14,7 @@ Configure .env variables as per .env.example
 
 `API_KEY=` The API key that you get from google ai studio
 
-`GEMINI_MODEL=` The supported gemini models (gemini-2.5-flash, gemini-2.5-flash-lite, gemini-3-flash-preview)
+`GEMINI_MODEL=` The supported gemini models (gemini-2.5-flash, gemini-2.5-flash-lite, gemini-3-flash-preview, gemini-3.1-flash-lite)
 
 `BACKEND_URL=` The url for the backend (http://backend:8001)
 

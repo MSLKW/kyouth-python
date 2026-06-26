@@ -65,7 +65,7 @@ async function getResponseAsync(text) {
 			fileText = await readTextFile(gFile);
 		else
 			console.warn("File type not supported");
-		console.log(fileText);
+		gFile = undefined;
 	}
 	const data = {message: text, file_contents: fileText};
 
