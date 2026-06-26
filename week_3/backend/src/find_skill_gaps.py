@@ -17,7 +17,7 @@ def find_skill_gaps(resume_contents: str, db_url: str) -> SkillGapResult:
         print(f"Database at {db_path} does not exist")
         return None
     if resume_contents == "":
-        print(f"Resume contents is empty")
+        print("Resume contents is empty")
         return None
 
     conn = sqlite3.connect(db_path)
@@ -42,12 +42,12 @@ def find_skill_gaps(resume_contents: str, db_url: str) -> SkillGapResult:
     except Exception:
         print("Error occured during AI prompt")
         return None
-    
+
     data_pattern = r"^[^,]+(?:,\s*[^,]+)*,?$"
-    if (bool(re.fullmatch(data_pattern, tech_skills)) == False):
+    if not bool(re.fullmatch(data_pattern, tech_skills)):
         print(f"AI returned invalid AI Output: {tech_skills}")
         return None
-        
+
     resume_skills_list = tech_skills.lower().split(", ")
 
     missing_skills = tech_list
@@ -57,4 +57,3 @@ def find_skill_gaps(resume_contents: str, db_url: str) -> SkillGapResult:
 
     skill_gap_result = SkillGapResult(gaps=missing_skills)
     return skill_gap_result
-
